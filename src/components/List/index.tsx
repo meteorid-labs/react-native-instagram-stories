@@ -57,13 +57,13 @@ const StoryList: FC<StoryListProps> = ( {
           paused={paused}
           videoProps={videoProps}
         />
+        <StoryHeader {...props} />
         <Progress
           active={isActive}
           activeStory={activeStoryIndex}
           progress={progress}
           length={stories.length}
         />
-        <StoryHeader {...props} />
         <StoryContent stories={stories} active={isActive} activeStory={activeStory} />
       </Animated.View>
     </StoryAnimation>
