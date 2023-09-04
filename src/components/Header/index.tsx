@@ -28,7 +28,7 @@ const StoryHeader: FC<StoryHeaderProps> = ( {
 
         }}
       >
-        <Close color={PROGRESS_COLOR} />
+        <Close color={'#FFFFFF'} />
       </TouchableOpacity>
     </View>
   );
