@@ -90,7 +90,7 @@ const StoryImage: FC<StoryImageProps> = ({
           ) : (
             <Image
               source={{ uri: data.uri }}
-              style={{ width: 400, aspectRatio: 0.5626 }}
+              style={{ width: Dimensions.get( 'window' ).width > 400 ? Dimensions.get( 'window' ).width : 400, aspectRatio: 0.5626 }}
               resizeMode="contain"
               testID="storyImageComponent"
               onLayout={(e) => onImageLayout(Math.min(HEIGHT, e.nativeEvent.layout.height))}
