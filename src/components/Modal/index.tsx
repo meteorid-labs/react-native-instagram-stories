@@ -294,7 +294,7 @@ const StoryModal = forwardRef<StoryModalPublicMethods, StoryModalProps>( ( {
           <Animated.View style={[ ModalStyles.bgAnimation, backgroundAnimatedStyles ]} />
           <Animated.View style={[
             ModalStyles.absolute,
-            { width: WIDTH, height: HEIGHT },
+            { bottom: 0, right: 0 },
             animatedStyles,
             containerStyle,
           ]}

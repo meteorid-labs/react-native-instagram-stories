@@ -7,50 +7,50 @@ import { HEIGHT, LOADER_COLORS, WIDTH } from '../../core/constants';
 import ImageStyles from './Image.styles';
 import StoryVideo from './video';
 
-const StoryImage: FC<StoryImageProps> = ( {
+const StoryImage: FC<StoryImageProps> = ({
   stories, active, activeStory, defaultImage, isDefaultVideo, paused, videoProps,
   onImageLayout, onLoad,
-} ) => {
+}) => {
 
-  const [ data, setData ] = useState<{ uri: string, isVideo?: boolean }>(
+  const [data, setData] = useState<{ uri: string, isVideo?: boolean }>(
     { uri: defaultImage, isVideo: isDefaultVideo },
   );
 
-  const loading = useSharedValue( true );
-  const color = useSharedValue( LOADER_COLORS );
+  const loading = useSharedValue(true);
+  const color = useSharedValue(LOADER_COLORS);
 
   const onImageChange = async () => {
 
-    if ( !active.value ) {
+    if (!active.value) {
 
       return;
 
     }
 
-    const story = stories.find( ( item ) => item.id === activeStory.value )!;
+    const story = stories.find((item) => item.id === activeStory.value)!;
 
-    if ( !story ) {
+    if (!story) {
 
       return;
 
     }
 
-    if ( data.uri === story.sourceUrl ) {
+    if (data.uri === story.sourceUrl) {
 
       onLoad();
 
     } else {
 
       loading.value = true;
-      setData( { uri: story?.sourceUrl, isVideo: story?.mediaType === 'video' } );
+      setData({ uri: story?.sourceUrl, isVideo: story?.mediaType === 'video' });
 
     }
 
-    const nextStory = stories[stories.indexOf( story ) + 1];
+    const nextStory = stories[stories.indexOf(story) + 1];
 
-    if ( nextStory ) {
+    if (nextStory) {
 
-      Image.prefetch( nextStory.sourceUrl );
+      Image.prefetch(nextStory.sourceUrl);
 
     }
 
@@ -58,14 +58,14 @@ const StoryImage: FC<StoryImageProps> = ( {
 
   useAnimatedReaction(
     () => activeStory.value,
-    ( res, prev ) => res !== prev && runOnJS( onImageChange )(),
-    [ activeStory.value ],
+    (res, prev) => res !== prev && runOnJS(onImageChange)(),
+    [activeStory.value],
   );
 
-  const onContentLoad = ( duration?: number ) => {
+  const onContentLoad = (duration?: number) => {
 
     loading.value = false;
-    onLoad( duration );
+    onLoad(duration);
 
   };
 
@@ -74,29 +74,34 @@ const StoryImage: FC<StoryImageProps> = ( {
       <View style={ImageStyles.container}>
         <Loader loading={loading} color={color} size={50} />
       </View>
-      {data.uri && (
-        data.isVideo ? (
-          <StoryVideo
-            onLoad={onContentLoad}
-            onLayout={onImageLayout}
-            uri={data.uri}
-            paused={paused}
-            {...videoProps}
-          />
-        ) : (
-          <Image
-            source={{ uri: data.uri }}
-            style={{ width: WIDTH, aspectRatio: 0.5626 }}
-            resizeMode="contain"
-            testID="storyImageComponent"
-            onLayout={( e ) => onImageLayout( Math.min( HEIGHT, e.nativeEvent.layout.height ) )}
-            onLoad={() => onContentLoad()}
-          />
-        )
-      )}
+      <View style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        {data.uri && (
+          data.isVideo ? (
+            <StoryVideo
+              onLoad={onContentLoad}
+              onLayout={onImageLayout}
+              uri={data.uri}
+              paused={paused}
+              {...videoProps}
+            />
+          ) : (
+            <Image
+              source={{ uri: data.uri }}
+              style={{ width: 400, aspectRatio: 0.5626 }}
+              resizeMode="contain"
+              testID="storyImageComponent"
+              onLayout={(e) => onImageLayout(Math.min(HEIGHT, e.nativeEvent.layout.height))}
+              onLoad={() => onContentLoad()}
+            />
+          )
+        )}
+      </View>
     </>
   );
 
 };
 
-export default memo( StoryImage );
+export default memo(StoryImage);
